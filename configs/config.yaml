@@ -1,0 +1,91 @@
+# Set the architecture by editing the selected Python file under tools/models/.
+general:
+  tree: "AnalysisMiniTree"
+  output_dir: "output/"
+  weight_branch: "weight_total_NOSYS"
+  features:
+    - "lep_pt_lead_NOSYS"
+    - "lep_pt_sublead_NOSYS"
+    - "lep_pt_total_NOSYS"
+    - "njets_NOSYS"
+    - "bjets_num_NOSYS"
+    - "mll_NOSYS"
+    - "mt_ll_NOSYS"
+    - "deltaR_ll_NOSYS"
+    - "dphi_llmet_NOSYS"
+    - "dphi_leadjet_met_NOSYS"
+    - "met_met_NOSYS"
+    - "met_significance_NOSYS"
+    - "met_over_mtz_NOSYS"
+    - "pt_over_mtz_NOSYS"
+  saved_models_dir: "data/saved_models"
+
+model:
+  #model_path: "tools/models/mlp_torch.py"
+  model_path: "tools/models/mlp_tensorflow.py"
+  
+training:
+  model_name: mlp_tf #"mlp_torch" #mlp_tf
+  seed: 42
+  test_fraction: 0.2
+  epochs: 30
+  batch_size: 2048
+  inference_batch_size: 100000
+  cpu_threads: 1
+  learning_rate: 0.001
+  threshold: 0.5
+  use_weights: true
+  balanced_sample_weight: true
+  background_systematic_fraction: 0.0
+  drop_negative_weight: true
+  absolute_negative_weight: false
+  
+plots:
+  loss: true
+  correlation: true
+  scores: true
+  roc: true
+  confusion: true
+  significance: true
+  stack: true
+  overlay: true
+  
+samples:
+  signal:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/signal.root"
+    tree: "tree_reco_NOMINAL"
+    label: 1
+  zjets:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/zjets_nn.root"
+    label: 0
+    mev_to_gev: &id001
+    - "lep_pt_lead_NOSYS"
+    - "lep_pt_sublead_NOSYS"
+    - "lep_pt_total_NOSYS"
+    - "mll_NOSYS"
+    - "mt_ll_NOSYS"
+    - "met_met_NOSYS"
+  ttbar:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/ttbar_nn.root"
+    label: 0
+    mev_to_gev: *id001
+  wjets:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/wjets_nn.root"
+    label: 0
+    mev_to_gev: *id001
+  singletop:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/singletop_nn.root"
+    label: 0
+    mev_to_gev: *id001
+  sh_llvv_os:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/sherpa_llvv_os_nn.root"
+    label: 0
+    mev_to_gev: *id001
+  sh_lllv:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/sherpa_lllv_nn.root"
+    label: 0
+    mev_to_gev: *id001
+  sh_Zgamma:
+    path: "/home/alaha/local-samples/ml-pytorch-hzyd/sherpa_Zgamma_nn.root"
+    label: 0
+    mev_to_gev: *id001

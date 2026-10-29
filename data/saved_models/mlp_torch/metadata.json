@@ -1,0 +1,21 @@
+{
+  "features": [
+    "lep_pt_lead_NOSYS",
+    "lep_pt_sublead_NOSYS",
+    "lep_pt_total_NOSYS",
+    "njets_NOSYS",
+    "bjets_num_NOSYS",
+    "mll_NOSYS",
+    "mt_ll_NOSYS",
+    "deltaR_ll_NOSYS",
+    "dphi_llmet_NOSYS",
+    "dphi_leadjet_met_NOSYS",
+    "met_met_NOSYS",
+    "met_significance_NOSYS",
+    "met_over_mtz_NOSYS",
+    "pt_over_mtz_NOSYS"
+  ],
+  "model_path": "tools/models/mlp_torch.py",
+  "tree": "AnalysisMiniTree",
+  "weight_branch": "weight_total_NOSYS"
+}

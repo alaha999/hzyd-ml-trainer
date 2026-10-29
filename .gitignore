@@ -1,0 +1,12 @@
+#output
+output/
+
+#large root files
+*.root
+
+#backup files
+*.*~
+
+# Python cache
+__pycache__/
+*.py[cod]

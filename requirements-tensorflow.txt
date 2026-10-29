@@ -1,0 +1,6 @@
+tensorflow-cpu
+numpy
+uproot
+PyYAML
+scikit-learn
+matplotlib

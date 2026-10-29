@@ -1,0 +1,6 @@
+torch
+numpy
+uproot
+PyYAML
+scikit-learn
+matplotlib
