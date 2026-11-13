@@ -3,20 +3,27 @@ import numpy as np
 import uproot
 
 
-def read_samples(config, features, weight_branch, tree_default):
+def read_samples(config, features, weight_branch, tree_default, max_events=None):
     """Return X, labels, signed MC weights, and per-event process names."""
     xs, ys, ws, ps = [], [], [], []
     for name, item in config.items():
         path = Path(item['path']).expanduser()
         tree = item.get('tree', tree_default)
         branches = list(dict.fromkeys(features + ([weight_branch] if weight_branch else [])))
+
+        #read using uproot
         with uproot.open(path) as f:
-            arr = f[tree].arrays(branches, library='np')
+            t = f[tree]
+            n_events = min(t.num_entries, int(max_events)) if max_events is not None else t.num_entries
+            arr = t.arrays(branches, entry_stop=n_events, library='np')
+
+        #concatenate in X
         x = np.column_stack([arr[v] for v in features]).astype(np.float32)
+        #convert MEV -> GEV
         for feature in item.get('mev_to_gev', []):
             if feature not in features:
                 raise ValueError(f'{name}: conversion feature {feature} not in features')
-            x[:, features.index(feature)] /= 1000.0
+            x[:, features.index(feature)] /= 1000.0            
         w = np.asarray(arr[weight_branch] if weight_branch else np.ones(len(x)), dtype=np.float64)
         y = np.full(len(x), int(item['label']), dtype=np.int64)
         if y[0:1].size and y[0] not in (0, 1):
@@ -28,4 +35,3 @@ def read_samples(config, features, weight_branch, tree_default):
     if not xs:
         raise ValueError('No processes configured')
     return tuple(map(np.concatenate, (xs, ys, ws, ps)))
-
